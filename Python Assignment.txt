@@ -1,0 +1,42 @@
+import pandas as pd
+print(" \n ----SHIPPING GOODS TASK PRANJAL GOSWAMI---- \n")
+df = pd.read_excel('sample data.xlsx')
+def maximum_profit_on_goods():
+    return df['Profit'].max()
+def lowest_profit_on_goods():
+    return df['Profit'].min()
+def air_mode():
+    tmp = df['Ship Mode'].value_counts(normalize=True)*100
+    return 'Express Air Mode: '+str(round(tmp['Express Air'],2))+'% & Regular Air Mode: '+str(round(tmp['Regular Air'],2))+'%'
+def avg_profit():
+    tmp = df.loc[df['Ship Mode'] == 'Delivery Truck']
+    profit = tmp['Profit'].sum()
+    total_count = df.shape[0]
+    return (profit/total_count)
+def get_customers():
+    tmp = df.loc[df['Unit Price'] >= 45]
+    return list(tmp['customer name'])
+def get_count():
+    customer = list(df['customer name'].unique())
+    count=0
+    for i in customer:
+        tmp = df.loc[df['customer name'] == i].drop_duplicates(subset=['Ship Mode'])
+        d = tmp.loc[df['Ship Mode'].isin(['Express Air', 'Regular Air'])]
+        if d.shape[0]==2:
+            count+=1
+    return count
+print('\n Highest Profit of goods percentage: '+str(maximum_profit_on_goods()))
+print("--------------------------------------------------------------")
+print('\n Least Profit of goods: '+str(lowest_profit_on_goods()))
+print("--------------------------------------------------------------")
+print(air_mode())
+print("--------------------------------------------------------------")
+print('\n Average profit for Delivery truck mode '+str(avg_profit()))
+print("--------------------------------------------------------------")
+print('\n Customers that ship more than rupees 45 are :')
+print("--------------------------------------------------------------")
+for i in get_customers():
+    print(i)
+print(' \n % of customers are delivered in Express Air Mode and regular: '+str(get_count()))
+print("--------------------------------------------------------------")
+
